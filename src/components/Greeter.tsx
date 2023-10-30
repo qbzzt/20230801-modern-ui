@@ -10,46 +10,64 @@ import { Address } from 'abitype'
 
 let greeterABI = [
   {
-    "inputs":[],
-    "stateMutability":"nonpayable",
-    "type":"constructor"
-  },
-  
-  {
-    "anonymous":false,
-    "inputs":[
-      { "indexed":false,
-        "internalType":"string",
-        "name":"_old",
-        "type":"string"},
-      { "indexed":false,
-        "internalType":"string",
-        "name":"_new",
-        "type":"string"}
-      ],
-    "name":"GreetingChange",
-    "type":"event"
-  },
-    
-  {
-    "inputs":[],"name":
-    "greet",
-    "outputs":[
-      {"internalType":"string","name":"","type":"string"}
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_greeting",
+        "type": "string"
+      }
     ],
-    "stateMutability":"view",
-    "type":"function"
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
-  
-  {"inputs":[
-      {"internalType":"string","name":"_greeting","type":"string"}
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "greeting",
+        "type": "string"
+      }
     ],
-    "name":"setGreeting",
-    "outputs":[],
-    "stateMutability":"nonpayable",
-    "type":"function"
+    "name": "SetGreeting",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "greet",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_greeting",
+        "type": "string"
+      }
+    ],
+    "name": "setGreeting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ] as const   // greeterABI
+
+
 
 type AddressPerBlockchainType = {
   [key: number]: Address
@@ -68,11 +86,8 @@ type ShowGreetingAttrsType = {
 
 
 const contractAddrs : AddressPerBlockchainType = {
-  // OP Goerli
-  420: '0x51dac29fe2da340f03ec4e4c9e3724c153314d1f',
-
-  // Goerli
-  5: '0x7fafb175325910034af262b609cc16706526c878'
+  // Holesky
+  17000: '0x432d810484AdD7454ddb3b5311f0Ac2E95CeceA8'
 }
 
 const Greeter = () => {  
