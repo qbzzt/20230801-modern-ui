@@ -12,9 +12,7 @@ export function App() {
       <ConnectButton />
 
       {isConnected && (
-        <>
           <Greeter />
-        </>
       )}
       
     </>
