@@ -5,7 +5,7 @@ import {  useNetwork,
           useContractWrite, 
           useContractEvent 
         } from 'wagmi'
-import { Address } from 'abitype'
+import { AddressType } from 'abitype'
 
 
 let greeterABI = [
@@ -70,7 +70,15 @@ let greeterABI = [
 
 
 type AddressPerBlockchainType = {
-  [key: number]: Address
+  [key: number]: AddressType
+}
+
+const contractAddrs : AddressPerBlockchainType = {
+  // Holesky
+  17000: '0x432d810484AdD7454ddb3b5311f0Ac2E95CeceA8',
+
+  // Sepolia
+  11155111: '0x7143d5c190F048C8d19fe325b748b081903E3BF0'
 }
 
 
@@ -85,25 +93,28 @@ type ShowGreetingAttrsType = {
 }
 
 
-const contractAddrs : AddressPerBlockchainType = {
-  // Holesky
-  17000: '0x432d810484AdD7454ddb3b5311f0Ac2E95CeceA8'
-}
-
 const Greeter = () => {  
   const { chain } = useNetwork()
 
-  const greeterAddr = chain ? contractAddrs[chain.id] : undefined
+  const greeterAddr = chain && contractAddrs[chain.id] 
 
   const readResults = useContractRead({
     address: greeterAddr,
     abi: greeterABI,
-    functionName: "greet"
-    // No arguments
+    functionName: "greet", // No arguments
+    watch: true
   })
+
+  console.log(`readResults result:${readResults.data}`)
 
   const [ currentGreeting, setCurrentGreeting ] = 
     useState(readResults.data)
+  const [ currentChain, setCurrentChain ] =
+    useState(chain.id)
+
+  if (currentGreeting != readResults.data)
+    setCurrentGreeting(readResults.data)
+
   const [ newGreeting, setNewGreeting ] = useState("")
 
   const greetingChange : ChangeEventHandler<HTMLInputElement> = (evt) => 
@@ -115,27 +126,14 @@ const Greeter = () => {
     functionName: 'setGreeting',
     args: [ newGreeting ]
   })
-
   const workingTx = useContractWrite(preparedTx.config)
-
-  // const unwatch = 
-  useContractEvent({
-    address: greeterAddr,
-    abi: greeterABI,
-    eventName: "GreetingChange",
-    listener: log => {
-      console.log("Inside event listener")
-         console.log(log[0].args["_new"])      
-      setCurrentGreeting(log[0].args["_new"])
-    }
-  })
 
   return (
     <>
       <h2>Greeter</h2>
       {
         !readResults.isError && !readResults.isLoading &&
-          <ShowGreeting greeting={currentGreeting} />
+          <ShowGreeting greeting={readResults.data} />
       }
       <hr />
 
@@ -145,7 +143,7 @@ const Greeter = () => {
       />
 
       <button disabled={!workingTx.write}
-              onClick={() => workingTx.write?.()}
+              onClick={workingTx.write}
       >
         Update greeting
       </button>
@@ -156,6 +154,8 @@ const Greeter = () => {
     </>
   )
 }
+
+
 
 
 const ShowGreeting = (attrs : ShowGreetingAttrsType) => {
