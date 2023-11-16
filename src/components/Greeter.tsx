@@ -77,6 +77,9 @@ const contractAddrs : AddressPerBlockchainType = {
   // Holesky
   17000: '0x432d810484AdD7454ddb3b5311f0Ac2E95CeceA8',
 
+  // Redstone Holesky
+  17001: '0x4919517f82a1B89a32392E1BF72ec827ba9986D3',
+
   // Sepolia
   11155111: '0x7143d5c190F048C8d19fe325b748b081903E3BF0'
 }
@@ -159,16 +162,14 @@ const Greeter = () => {
 
 
 const ShowGreeting = (attrs : ShowGreetingAttrsType) => {
-  return <>
-    <b>{attrs.greeting}</b>
-  </>
+  return <b>{attrs.greeting}</b>
 }
 
 
 const ShowObject = (attrs: ShowObjectAttrsType ) => {
   const keys = Object.keys(attrs.object)
   const funs = keys.filter(k => typeof attrs.object[k] == "function")
-  return <>  
+  return <>
     <details>
       <summary>{attrs.name}</summary>
       <pre>

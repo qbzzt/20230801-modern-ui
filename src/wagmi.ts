@@ -5,10 +5,6 @@ import { publicProvider } from 'wagmi/providers/public'
 
 const walletConnectProjectId = 'c96e690bb92b6311e8e9b2a6a22df575'
 
-holesky.rpcUrls.public.http = holesky.rpcUrls.default.http
-
-console.log(holesky)
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [ holesky, sepolia ],
   [
